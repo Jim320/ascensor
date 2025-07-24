@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ascent</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --verde-profundo: #0f2e20;
+      --verde-primario: #174d36;
+      --verde-claro: #2f7b5a;
+      --oro-ricos: #c5a253;
+      --hueso: #f4f1e8;
+      --transicion: 0.3s;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, var(--verde-profundo), var(--verde-primario));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--hueso);
+    }
+
+    .elevator-panel {
+      background: linear-gradient(145deg, var(--verde-primario), transparent);
+      border: 1px solid var(--oro-ricos);
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+      padding: 60px;
+      text-align: center;
+      width: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 600px;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 3em;
+      color: var(--oro-ricos);
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(197, 162, 83, 0.5);
+    }
+
+    .time-date-display {
+      font-family: 'Cinzel', serif;
+      font-size: 1em;
+      padding: 10px 0;
+      border-top: 1px solid var(--oro-ricos);
+      border-bottom: 1px solid var(--oro-ricos);
+      margin-bottom: 30px;
+      color: var(--hueso);
+    }
+
+    .floor-display {
+      font-family: 'Cinzel', serif;
+      font-size: 4.5em;
+      color: var(--hueso);
+      animation: fadeInScale 0.4s ease-in-out forwards, glow 2s infinite;
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      }
+      50% {
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+      }
+    }
+    .buttons-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 40px 0;
+    }
+
+    .floor-button {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 2px solid var(--oro-ricos);
+      background: var(--verde-primario);
+      color: var(--hueso);
+      font-size: 1.5em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transicion);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .floor-button:hover {
+      background: var(--oro-ricos);
+      color: var(--verde-profundo);
+      transform: scale(1.05);
+    }
+
+    .floor-button.active {
+      background: var(--oro-ricos);
+      color: var(--verde-profundo);
+      box-shadow: 0 0 25px rgba(197, 162, 83, 0.6);
+    }
+
+    .motivational-quote-container {
+      margin-top: 30px;
+      min-height: 50px;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.1em;
+      color: var(--hueso);
+      transition: opacity 1s ease;
+      opacity: 0;
+    }
+
+    .brand-signature {
+      margin-top: 30px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="elevator-panel">
+    <h1>Ascensor</h1>
+
+    <div class="time-date-display">
+      <span id="currentTime">--:--</span>
+      <span id="currentDate">--</span>
+    </div>
+
+    <div id="floorDisplay" class="floor-display">1</div>
+
+    <div class="buttons-container">
+      <button class="floor-button" data-floor="1">1</button>
+      <button class="floor-button" data-floor="2">2</button>
+      <button class="floor-button" data-floor="3">3</button>
+    </div>
+
+    <div id="quote" class="motivational-quote-container">
+      <!-- Frase se coloca con JS -->
+    </div>
+
+    <div class="brand-signature">
+      <svg width="160" height="30" viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg">
+        <text x="80" y="20" text-anchor="middle" font-family="'Cinzel', serif" font-size="16" fill="var(--oro-ricos)" letter-spacing="2">
+           Andy B | Luis G
+        </text>
+      </svg>
+    </div>
+  </div> <!-- Cierre de .elevator-panel -->
+  <script>
+    const floorDisplay = document.getElementById('floorDisplay');
+    const floorButtons = document.querySelectorAll('.floor-button');
+    const quoteElement = document.getElementById('quote');
+    const currentTimeElement = document.getElementById('currentTime');
+    const currentDateElement = document.getElementById('currentDate');
+
+    const frases = [
+        "El Mundo Es Tuyo.",
+        "No Hay Tiempo Que Perder.",
+        "Sueña En Grande. Actúa Más Grande.",
+        "Deja Tu Huella.",
+        "Hoy Es El Día.",
+        "Crea Tu Futuro.",
+        "Sé La Leyenda.",
+        "Tu Historia Empieza Ahora.",
+        "Elévate.",
+        "Adueñate De Tu Momento.",]
+    let fraseActual = 0;
+
+    function cambiarPiso(piso) {
+      floorDisplay.textContent = piso;
+
+      floorButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.floor === piso) {
+          btn.classList.add('active');
+        }
+      });
+
+      mostrarFrase();
+    }
+
+    function mostrarFrase() {
+      quoteElement.style.opacity = 0;
+      setTimeout(() => {
+        quoteElement.textContent = frases[fraseActual];
+        quoteElement.style.opacity = 1;
+        fraseActual = (fraseActual + 1) % frases.length;
+      }, 400);
+    }
+
+    function actualizarHoraFecha() {
+      const ahora = new Date();
+      const opcionesHora = { hour: '2-digit', minute: '2-digit', hour12: false };
+      const opcionesFecha = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+
+      currentTimeElement.textContent = ahora.toLocaleTimeString('es-ES', opcionesHora);
+      currentDateElement.textContent = ahora.toLocaleDateString('es-ES', opcionesFecha)
+        .replace(/^\w/, c => c.toUpperCase()); // Capitaliza primer letra
+    }
+
+    // Event listeners para botones
+    floorButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const piso = button.dataset.floor;
+        cambiarPiso(piso);
+      });
+    });
+
+    // Inicial
+    cambiarPiso("1");
+    mostrarFrase();
+    setInterval(mostrarFrase, 9000); // Cambia frase cada 9s
+    setInterval(actualizarHoraFecha, 1000);
+    actualizarHoraFecha();
+  </script>
+</body>
+</html>
